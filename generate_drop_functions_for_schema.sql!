@@ -1,2 +1,0 @@
-select 'drop ' || routine_type || ' ' ||  routine_schema || '.' || routine_name || '  ;'
-from information_schema.routines where    routine_schema in ('goreprod_stage_v062')  order by routine_schema , routine_name;
