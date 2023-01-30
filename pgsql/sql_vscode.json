@@ -1,0 +1,77 @@
+{
+	// Place your snippets for sql here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and , ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	
+	"CREATE VIEW": {
+		"prefix": "CREATE",
+		"body": [
+		"CREATE VIEW ${TM_SELECTED_TEXT} AS ( ", 
+		"	SELECT", 
+		"	FROM ",
+		"	JOIN   ON  (  =  )  ",
+		"	WHERE ",
+		"	AND",
+		"	AND ",
+		"	)",
+		"	; ",
+		"COMMENT ON VIEW ${TM_SELECTED_TEXT} IS '' ;",
+		"GRANT SELECT ON ${TM_SELECTED_TEXT} TO ; ",
+		"GRANT ALL ON  ${TM_SELECTED_TEXT} TO ;"
+		],
+		"description": "CREATE VIEW statement Full"
+}
+
+"DO Loop": {
+	"prefix": "CREATE",
+	"body": [
+	"DO $$DECLARE r record;",
+	"BEGIN",
+	"	FOR r IN SELECT table_schema, table_name FROM information_schema.tables",
+	"			 WHERE table_type = 'VIEW' AND table_schema = 'public'",
+	"	LOOP",
+	"		EXECUTE 'GRANT ALL ON ' || quote_ident(r.table_schema) || '.' || quote_ident(r.table_name) || ' TO webuser';",
+	"	END LOOP;",
+	"END$$;",
+	"	; "
+	],
+	"description": "DO LOOP example"
+}
+
+"ALTER DEFAULT PRIVILEGES": {
+	"prefix": "CREATE",
+	"body": [
+	"ALTER DEFAULT PRIVILEGES IN SCHEMA myschema GRANT SELECT ON TABLES TO PUBLIC;"
+	],
+	"description": "ALTER DEFAULT PRIVILEGES"
+}
+
+
+"CREATE FUNCTION": {
+	"prefix": "CREATE FUNCTION",
+	"body": [
+	"CREATE FUNCTION check_password(uname TEXT, pass TEXT)",
+	"RETURNS BOOLEAN AS $$",
+	"DECLARE passed BOOLEAN;",
+	"BEGIN",
+	"SELECT  (pwd = $2) INTO passed",
+	"FROM    pwds",
+	"WHERE   username = $1;",
+	"",
+	"RETURN passed;",
+	"END;",
+	"$$  LANGUAGE plpgsql",
+    "SECURITY DEFINER",
+    "-- Set a secure search_path: trusted schema(s), then 'pg_temp'.",
+    "SET search_path = admin, pg_temp;",
+	"COMMENT ON FUNCTION check_password(text,text) IS 'Fonction de ...';,"
+],
+"description": "CREATE FUNCTION"
+}
+	
+	
+
+}
+
+

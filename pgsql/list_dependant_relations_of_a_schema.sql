@@ -1,8 +1,8 @@
-SELECT dependent_ns.nspname as dependent_schema
+SELECT DISTINCT 
+dependent_ns.nspname as dependent_schema
 , dependent_view.relname as dependent_view 
 , source_ns.nspname as source_schema
 , source_table.relname as source_table
-, pg_attribute.attname as column_name
 FROM pg_depend 
 JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid 
 JOIN pg_class as dependent_view ON pg_rewrite.ev_class = dependent_view.oid 
@@ -12,7 +12,7 @@ JOIN pg_attribute ON pg_depend.refobjid = pg_attribute.attrelid
 JOIN pg_namespace dependent_ns ON dependent_ns.oid = dependent_view.relnamespace
 JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
 WHERE 
-source_ns.nspname = 'goreprod_stage_v062'
+source_ns.nspname = 'goreprod_source_v05'
 --AND source_table.relname = 'my_table'
 AND pg_attribute.attnum > 0 
 --AND pg_attribute.attname = 'my_column'
